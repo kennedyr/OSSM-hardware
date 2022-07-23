@@ -48,6 +48,7 @@ class OSSM
     float currentSensorOffset = 0;
     float immediateCurrent = 0;
     float averageCurrent = 0;
+    float peakCurrent = 0;
     float numberStrokes = 0;
     float travelledDistanceMeters = 0;
     float lifeSecondsPowered = 0;

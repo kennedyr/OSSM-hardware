@@ -396,6 +396,9 @@ void OSSM::getAnalogInputs()
     strokePercentage = getEncoderPercentage();
     immediateCurrent = getCurrentReadingAmps(20);
     averageCurrent = immediateCurrent * 0.02 + averageCurrent * 0.98;
+    if( immediateCurrent > peakCurrent){
+        peakCurrent = immediateCurrent;
+    }
 }
 
 float OSSM::getCurrentReadingAmps(int samples)
