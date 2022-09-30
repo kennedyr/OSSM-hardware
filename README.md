@@ -119,3 +119,7 @@ We are calling this the reference build, when deviating from it please check com
 10) Experienced users may wish to use a **ESP32 Development Board**  
    - We do not currently have a best suggestion if you are not using a reference board, most generic development boards are the same
    - We have found that the 3.3v boards may miss steps at high speed, so please use a level shifter as well. 
+
+## Official OSSM reference board
+
+![image](https://user-images.githubusercontent.com/43324815/150361448-80e9fdaf-4a8c-4054-a920-6eab9aa68678.png)
