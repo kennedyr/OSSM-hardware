@@ -1,13 +1,37 @@
 # OSSM - Open Source Sex Machine
 OSSM (pronounced like "Awesome") is a user friendly every day sex machine for the people.
 
-This project aims to help people curious about sex machines explore their interest. A second objective is optionally learning how mechanics, electronics, physics and computing are involved in your sexual pleasure.
+This project aims to help people curious about sex machines explore their interest. A second objective is optionally learning how mechanics, electronics, physics and computing are involved in your sexual pleasure.  We encourage a developing ecosystem of options.  If you can build a better _reference board/remote_ contribute back to the community and offer them for sale. 
 
-Please note that this is a _work in progress_ and we have attempted to keep compatibility with the current BOM going forward, but it's not guaranteed.
+Please note that this is a _work in progress_ and is closer to an alpha than beta product.  There are a number of machines completed and in use but you will have to explore the solution space even using the recommended hardware and a reference board.  Documentation is a work in progress and there are number of flavours of OSSM.  
 
-*Primary design goals* are to make a machine that is Compact, Quiet, Moderate cost, 3D printable (no cutting/machining), High performance, flexible, Easily sourced components, Doesn't look like a giant machine.
+During development we are attempting to keep compatibility with the current BOM going forward, but it's not guaranteed. If a better motor or other part is found the project may pivot.  Being open source you can continue to support it yourself and keep your machine maintained.  
+
+*Primary design goals* are to make a machine that is Accessible, Compact, Quiet, Moderate cost, 3D printable (no cutting/machining), High performance, flexible, Easily sourced components, Doesn't look like a giant machine.
 
 ## Getting Started
+
+Deciding how to build your OSSM
+
+Getting started on building an OSSM can be a bewildering number of choices. One way to look at building an OSSM is that with a diverse set of skills it is quite an easy task. however, many people have a subset of these skills and tools:
+
+- Mechanical skills for assembling the OSSM
+
+- 3D printing skills and a functional FDM printer
+
+- Software development skills and experience with PlatformIO
+
+- Electronics skills including soldering and component specification
+
+- Computer Aided Design (CAD) skills
+
+There are easier and harder ways to build an OSSM. The more skills you have the more you can improvise with different hardware and software. The less skills you have the harder time you have if you stray off the well-trodden path.
+
+Keep in mind that the OSSM community is small. The more time spent supporting people can distract community members from making OSSM better. When you start your build, it is worthwhile reflecting on what is the best path for you to take. If you have no experience, no skills, no tools and cannot afford a reference board and the recommended servo, this is a project you should come back to later in your maker development. 
+
+As of October 2022, the OSSM is far from being a turnkey offering. There are multiple versions of firmware, different motor and how it is mounted requires research.
+
+The easiest path to getting an operational OSSM is to purchase a reference board and use the recommended JMC servo motor (more below)
 
 <h3><p align="center"><a href="FAQ.md">Read the Frequently Asked Questions</a></p></h3>
 
@@ -15,21 +39,21 @@ There are a few hardware flavours to choose from, we've included user modified v
 
 <h3><p align="center"><a href="https://github.com/KinkyMakers/OSSM-hardware/blob/master/Documentation/Assembly%20Instructions.pdf">Build Instructions</a></p></h3>
 
-Join our Discord to be part of the discussion and get help with your build. https://discord.gg/MmpT9xE
+Join our Discord to be part of the discussion. https://discord.gg/MmpT9xE
 
 ### Software
 
-The software is available in this github repository, the software is written and compiled utilizing PlatformIO on Visual Studio Code. <a href="OSSM PlatformIO Readme.md">Reference for working with the code in PlatformIO here</a>
+The software is available in this github repository along with specialised version in forks, the software is written and compiled utilizing PlatformIO on Visual Studio Code. <a href="OSSM PlatformIO Readme.md">Reference for working with the code in PlatformIO here</a>
 
-We recommend using the ESP32 microcontroller. This code is still arduino IDE compatible but offers many times better performance and a nice internet dashboard you can use!
-Control your OSSM at https://app.researchanddesire.com/ossm !
+###Microcontroller 
+We recommend using a reference board that already has a Microprocesser installed, but for experienced (and experimental users) it can be built using ESP32 microcontroller. This code is still arduino IDE compatible but offers many times better performance.  
 
-### Eagle PCB
-Simple PCB to power an ESP32 (wifi enabled microcontroller) from 24V and breakout the pins for the OSSM control
+### PCB design
+Simple PCB to power an ESP32 (wifi enabled microcontroller) from 24V and breakout the pins for the OSSM control is available in the repository. Alternatively you can purchase a reference board that makes it all easy.  Plug onto the recommended servo and connect up the power to the terminal block.  
 
 ### Mechanical design
 The OSSM use a compact belt design with components that have become widely available due to 3D printing popularity.
-It is driven by a Nema23 motor of **your** choosing, although we reccomend small integrated closed loop steppers for their cost to performance ratio.
+It is driven by a Nema23 patterned motor. The recommended and most widely supported feature rich is a JMC Servo which is the default option for the current developers.  Servo motors offer good torque at a wide range of speeds and require less power and are slightly more expensive.  Many of the more advanced features are exclusive to to later JMC firmare.  Experienced users have the option to use a Nema23 patterned motor of **your** choosing, although we reccomend small integrated closed loop steppers for their cost to performance ratio if not using a JMC servo.  
 
 <img src="https://github.com/KinkyMakers/OSSM-hardware/blob/5cbd1378f6389e5d8ece273931e7b261c27d1871/Documentation/OSSM%20mechanical%20overview.png" width="750" >
 
@@ -79,52 +103,19 @@ We are calling this the reference build, when deviating from it please check com
    - Choose the closest supply to the guidelines, **the ossm will still work**, but may be limited at maximum thrust force.
    - Ensure the power supply is fully enclosed (like a laptop power supply)
    - Ensure the power supply has the correct approvals for your location
+   - Cheap power supplies are "pays your money, takes your chances". 
 8) **Metric Cap Screws** : [Amazon.ca](https://www.amazon.ca/Comdox-500pcs-Socket-Screws-Assortment/dp/B06XQLTLHP/ref=sr_1_12?dchild=1&keywords=metric+socket+head+cap+screw+kit&qid=1600747665&sr=8-12)
    - A kit like this will provide what's needed:
-   - 4x m5x20
+   - 2x m5x20
+   - 2x M5X45
    - 1x m5x12 (can also use m5x20)
    - 10x m3x8
    - 2x m3x16
    - 8x m5 nuts
    - 8x m3 nuts
-9) **ESP32 Development Board**  
-  
+9) A reference board (most people) 
    - [An official OSSM reference PCB](https://research-and-desire.myshopify.com/collections/all/products/ossm-reference-board) 
+
+10) Experienced users may wish to use a **ESP32 Development Board**  
    - We do not currently have a best suggestion if you are not using a reference board, most generic development boards are the same
    - We have found that the 3.3v boards may miss steps at high speed, so please use a level shifter as well. 
-   - To start working on the project, something like this [Adafruit board](https://www.adafruit.com/product/3405) is an excellent place to start.
-   - Accessories required for prototyping include [Breadboard](https://www.amazon.ca/Breadboard-Solderless-Prototype-Distribution-Connecting/dp/B01EV6LJ7G/ref=sr_1_5?dchild=1&keywords=breadboard&qid=1627823170&sr=8-5) and [Dupont Jumpers](https://www.amazon.ca/120pcs-Multicolored-Breadboard-Arduino-raspberry/dp/B01LZF1ZSZ/ref=sr_1_5?dchild=1&keywords=dupont+jumper&qid=1627823220&sr=8-5)
-
-
-## Official OSSM Wiring
-
-
-![image](https://user-images.githubusercontent.com/43324815/150361448-80e9fdaf-4a8c-4054-a920-6eab9aa68678.png)
-
-
-### OSSM PCB Connections
-
-![image](https://user-images.githubusercontent.com/43324815/150355658-2ab2c53f-8da0-41ce-ad61-cfe9965b9ab2.png)
-
-
-### GPIO Layout
-
-![OSSM pinout](https://user-images.githubusercontent.com/12459679/152600401-80b986ea-6f5b-480d-ba74-5b5001079c1b.png)
-
-
-## Non-Official OSSM Wiring
-
-This should be a good start for the wiring of your OSSM! However, depending on your hardware mix settings or wiring may be different 
-
-### OSSM PCB w/ TB6600 Stepper Driver
-
-<img width="1028" alt="image" src="https://user-images.githubusercontent.com/43324815/159145946-a9960bba-c9bc-4717-b3b4-5b5c34b4a3d2.png">
-
-### Servo Wiring
-
-![image](https://user-images.githubusercontent.com/43324815/150361181-98c5375e-c517-4882-8e53-6cac407164b0.png)
-
-### Stepper Wiring 
-
-![wiring notes](https://github.com/KinkyMakers/OSSM-hardware/blob/44ab7a5deafa7dd3d66d521bb368959db542c164/Hardware/PCB/wiring%20notes%20800.png)
-
