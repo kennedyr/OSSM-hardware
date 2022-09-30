@@ -1,0 +1,28 @@
+### OSSM PCB Connections
+
+![image](https://user-images.githubusercontent.com/43324815/150355658-2ab2c53f-8da0-41ce-ad61-cfe9965b9ab2.png)
+
+
+### GPIO Layout
+
+![OSSM pinout](https://user-images.githubusercontent.com/12459679/152600401-80b986ea-6f5b-480d-ba74-5b5001079c1b.png)
+
+
+## Non-Official OSSM Wiring
+
+This should be a good start for the wiring of your OSSM! However, depending on your hardware mix settings or wiring may be different 
+
+### OSSM PCB w/ TB6600 Stepper Driver
+
+<img width="1028" alt="image" src="https://user-images.githubusercontent.com/43324815/159145946-a9960bba-c9bc-4717-b3b4-5b5c34b4a3d2.png">
+
+### Servo Wiring
+
+![image](https://user-images.githubusercontent.com/43324815/150361181-98c5375e-c517-4882-8e53-6cac407164b0.png)
+
+### Stepper Wiring 
+
+![wiring notes](https://github.com/KinkyMakers/OSSM-hardware/blob/44ab7a5deafa7dd3d66d521bb368959db542c164/Hardware/PCB/wiring%20notes%20800.png)
+
+
+
