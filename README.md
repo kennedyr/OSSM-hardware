@@ -132,7 +132,9 @@ We are calling this the reference build, when deviating from it please check com
 
    - The OSSM will work with small power supplies, but will be limited on maximum force.
    - Ensure the power supply is fully enclosed and shielded to avoid cross talk from electromagnetic interference (like a laptop power supply).
-   - Ensure the power supply has the correct approvals for your location - This really helps ensure performance as well! (UL, CE, etc.)  
+   - Ensure the power supply has the correct approvals for your location - This really helps ensure performance as well! (UL, CE, etc.)
+   - Purchase a good quality PSU such as a Meanwell.
+   - Meanwell PSU suitable for the OSSM uses a R7B DIN plug. Don't forget to add a DIN to 2.1mm adapter from Meanwell to your cart.   
 
 8) **Metric Hex Cap Screws** :  
    [Amazon - CA & US](https://www.amazon.ca/Comdox-500pcs-Socket-Screws-Assortment/dp/B06XQLTLHP)  
