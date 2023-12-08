@@ -16,6 +16,7 @@
 #include "OssmUi.h" // Separate file that helps contain the OLED screen functions
 #include "WiFi.h"
 #include "WiFiManager.h"
+#include "HX711.h"
 
 #define BRIGHTNESS 170
 #define LED_TYPE WS2811
@@ -38,6 +39,7 @@ class OSSM
     Encoder g_encoder;
     OssmUi g_ui;
     CRGB ossmleds[NUM_LEDS];
+    HX711 loadcell;
 
     enum runMode
     {
@@ -58,6 +60,7 @@ class OSSM
 
     int hardwareVersion = 10; // V2.7 = integer value 27
     float currentSensorOffset = 0;
+    float immediateVoltage = 0;
     float immediateCurrent = 0;
     float averageCurrent = 0;
     float numberStrokes = 0;
@@ -80,6 +83,9 @@ class OSSM
     int changePattern = 0;   // -1 = prev, 1 = next
     bool modeChanged = true; // initialize encoder state
     int rightKnobMode = 0;   // MODE_STROKE, MODE_DEPTH, MODE_SENSATION, MODE_PATTERN
+
+    float loadcellCalibrationFactor = 0;
+    float forceInLbs = 0;
 
     OSSM()
         : g_encoder(ENCODER_A, ENCODER_B),
@@ -117,10 +123,12 @@ class OSSM
     void writeEepromLifeStats();
     void updateLifeStats();
     void startLeds();
+    void calibrateForceSensor(float calibrationWeightLbs);
 
     // inputs
     void updateAnalogInputs();
     float getCurrentReadingAmps(int samples);
+    float getForceInLbs(int samples);
     float getVoltageReading(int samples);
 
     float getAnalogAveragePercent(int pinNumber, int samples);

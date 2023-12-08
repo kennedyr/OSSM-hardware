@@ -25,6 +25,10 @@
 // series in normally open setup) Switches wired from IO pin to ground.
 #define LIMIT_SWITCH_PIN 12
 
+#define CURRENT_SENSE_PIN 36
+#define VOLTAGE_SENSE_PIN 39
+
+
 /*
         Wifi Control Pins
 */
@@ -32,7 +36,7 @@
 #define WIFI_RESET_PIN 23
 
 //Pin for the toggle for wifi control (Can be left alone if no hardware toggle is required)
-#define WIFI_CONTROL_TOGGLE_PIN 22
+#define WIFI_CONTROL_TOGGLE_PIN 15
 
 #define LOCAL_CONTROLLER INPUT_PULLDOWN
 #define WIFI_CONTROLLER INPUT_PULLUP

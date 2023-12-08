@@ -20,6 +20,9 @@
 extern volatile int encoderButtonPresses;
 extern volatile long lastEncoderButtonPressMillis;
 
+const int LOADCELL_DOUT_PIN = 22;
+const int LOADCELL_SCK_PIN = 33;
+
 /*
     User Config for OSSM - Reference board users should tweak this to match their personal build.
 */

@@ -5,12 +5,14 @@
 #include <HTTPClient.h>       // Needed for the Bubble APP
 #include <WiFiManager.h>      // Used to provide easy network connection  https://github.com/tzapu/WiFiManager
 #include <Wire.h>             // Used for i2c connections (Remote OLED Screen)
+#include "HX711.h"
 
 #include "OSSM_Config.h" // START HERE FOR Configuration
 #include "OSSM_PinDef.h" // This is where you set pins specific for your board
 #include "OssmUi.h"      // Separate file that helps contain the OLED screen functions
 #include "Stroke_Engine_Helper.h"
 #include "Utilities.h" // Utility helper functions - wifi update and homing
+
 
 // Homing
 volatile bool g_has_not_homed = true;
@@ -76,6 +78,8 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(ENCODER_SWITCH), encoderPushButton, RISING);
 
     ossm.setup();
+    //ossm.calibrateForceSensor(5);
+
 
     // start the WiFi connection task so we can be doing something while homing!
     xTaskCreatePinnedToCore(wifiConnectionTask,   /* Task function. */
@@ -187,6 +191,13 @@ void getUserInputTask(void *pvParameters)
         //          "\% Distance to target: " + String(ossm.stepper.getDistanceToTargetSigned()) + " steps?");
 
         ossm.updateAnalogInputs();
+        //log position, speed, current, loadcell value, and voltage
+        LogDebugFormatted("Pos: ,%.1f, Speed: ,%.0f, Current: , %.2f, Loadcell:, %.2f , Voltage:, %.4f\n",
+                          ossm.stepper.getCurrentPositionInMillimeters(),
+                          ossm.stepper.getCurrentVelocityInStepsPerSecond(),
+                          ossm.immediateCurrent,
+                          ossm.forceInLbs,
+                          ossm.immediateVoltage);
         ossm.handleStopCondition();
 
         if (digitalRead(WIFI_CONTROL_TOGGLE_PIN) == HIGH) // TODO: check if wifi available and handle gracefully
@@ -201,6 +212,7 @@ void getUserInputTask(void *pvParameters)
 
                 ossm.setInternetControl(false);
             }
+            ossm.wifiControlActive = false;
         }
 
         // We should scale these values with initialized settings not hard coded
@@ -228,7 +240,7 @@ void getUserInputTask(void *pvParameters)
             // high to low speed causes the motor to travel a long distance before slowing.
         }
         previousSpeedPercentage = ossm.speedPercentage;
-        vTaskDelay(50); // let other code run!
+        vTaskDelay(5); // let other code run!
     }
 }
 

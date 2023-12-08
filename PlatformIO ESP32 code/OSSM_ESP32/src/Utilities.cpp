@@ -30,12 +30,15 @@ void OSSM::setup()
     initializeStepperParameters();
     initializeInputs();
     strcpy(Id, ossmId);
-    wifiAutoConnect();
+    // wifiAutoConnect();
     delay(500);
     if (checkForUpdate() == true)
     {
         updatePrompt();
     };
+    loadcell.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+    loadcell.set_offset(-120448.0);
+    loadcell.set_scale(-24584.1/2.0f);
 }
 
 void OSSM::runPenetrate()
@@ -721,6 +724,7 @@ int OSSM::readEepromSettings()
     EEPROM.get(4, numberStrokes);
     EEPROM.get(12, travelledDistanceMeters);
     EEPROM.get(20, lifeSecondsPoweredAtStartup);
+    EEPROM.get(28, loadcellCalibrationFactor);
 
     if (numberStrokes == NAN || !(numberStrokes > 0))
     {
@@ -755,6 +759,7 @@ void OSSM::writeEepromLifeStats()
     EEPROM.put(4, numberStrokes);
     EEPROM.put(12, travelledDistanceMeters);
     EEPROM.put(20, lifeSecondsPowered);
+    EEPROM.put(28, loadcellCalibrationFactor);
     EEPROM.commit();
     LogDebug("eeprom written");
 }
@@ -771,15 +776,15 @@ void OSSM::updateLifeStats()
     minutes = lifeSecondsPowered / 60;
     hours = minutes / 60;
     days = hours / 24;
-    if ((millis() - lastLifeUpdateMillis) > 5000)
-    {
-        Serial.printf("\n%dd %dh %dm %ds \n", ((int(days))), (int(hours) % 24), (int(minutes) % 60),
-                      (int(lifeSecondsPowered) % 60));
-        Serial.printf("%.0f strokes \n", numberStrokes);
-        Serial.printf("%.2f kilometers \n", travelledDistanceKilometers);
-        Serial.printf("%.2fA avg current \n", averageCurrent);
-        lastLifeUpdateMillis = millis();
-    }
+    // if ((millis() - lastLifeUpdateMillis) > 5000)
+    // {
+    //     Serial.printf("\n%dd %dh %dm %ds \n", ((int(days))), (int(hours) % 24), (int(minutes) % 60),
+    //                   (int(lifeSecondsPowered) % 60));
+    //     Serial.printf("%.0f strokes \n", numberStrokes);
+    //     Serial.printf("%.2f kilometers \n", travelledDistanceKilometers);
+    //     Serial.printf("%.2fA avg current \n", averageCurrent);
+    //     lastLifeUpdateMillis = millis();
+    // }
     if ((millis() - lastLifeWriteMillis) > 180000)
     {
         // write eeprom every 3 minutes
@@ -803,10 +808,50 @@ void OSSM::startLeds()
         delay(4);
     }
 }
+void OSSM::calibrateForceSensor(float calibrationWeightLbs)
+{
+    // place calibration weight on force sensor, measure analog voltage, and calculate calibration factor
+    // Zero factor: -120448.000000
+    // Calibration factor: -24584.099609
+    loadcell.set_offset(-120448.0);
+    loadcell.set_scale(-24584.1/2.0f);
+    float loadcellReading = 0;
+
+    ossmleds[0] = CHSV(0, 255, 10);
+    FastLED.show();
+    LogDebug("Place nothing on force sensor");
+    while (digitalRead(WIFI_RESET_PIN) == LOW)
+    {
+    };
+    loadcell.set_scale();
+    loadcell.tare();
+    float zero_factor = loadcell.read_average();
+    LogDebugFormatted("Zero factor: %f \n", zero_factor);
+    LogDebug("Place calibration weight on force sensor");
+    while (digitalRead(WIFI_RESET_PIN) == LOW)
+    {
+    };
+    float rawLoadcell = loadcell.get_units(5);
+    loadcellCalibrationFactor = (rawLoadcell / calibrationWeightLbs);
+    LogDebugFormatted("Calibration factor: %f \n", loadcellCalibrationFactor);
+    loadcell.set_scale(loadcellCalibrationFactor);
+    ossmleds[0] = CHSV(60, 255, 100);
+    FastLED.show();
+    delay(1000);
+    float looptimer = millis();
+    // while (digitalRead(WIFI_RESET_PIN) == LOW)
+    // {
+    //     loadcellReading = loadcell.get_units(1);
+    //     LogDebugFormatted("Loop time: %f  Loadcell reading: %f \n", (millis() - looptimer), loadcellReading);
+    //     looptimer = millis();
+    //     // delay(100);
+    // };
+    writeEepromLifeStats();
+}
 
 void OSSM::updateAnalogInputs()
 {
-    speedPercentage = getAnalogAveragePercent(SPEED_POT_PIN, 50);
+    speedPercentage = getAnalogAveragePercent(SPEED_POT_PIN, 30);
 
     if (modeChanged)
     {
@@ -862,6 +907,8 @@ void OSSM::updateAnalogInputs()
 
     immediateCurrent = getCurrentReadingAmps(20);
     averageCurrent = immediateCurrent * 0.02 + averageCurrent * 0.98;
+    forceInLbs = getForceInLbs(1);
+    immediateVoltage = getVoltageReading(20);
 }
 
 float OSSM::getCurrentReadingAmps(int samples)
@@ -871,7 +918,19 @@ float OSSM::getCurrentReadingAmps(int samples)
     // 0.13886 is a scaling factor determined by real life testing. Convert percent full scale to amps.
     return current;
 }
-float OSSM::getVoltageReading(int samples) {}
+float OSSM::getForceInLbs(int samples)
+{
+    // measure analog voltage on pin 33, scale it by calibration factor, and return force in lbs
+    float forceInLbs = loadcell.get_units(samples);
+    // LogDebugFormatted("Force: %f lbs\n", forceInLbs);
+    return forceInLbs;
+}
+float OSSM::getVoltageReading(int samples)
+{
+    float voltageAnalogPercent = getAnalogAveragePercent(VOLTAGE_SENSE_PIN, samples);
+    float voltage = (voltageAnalogPercent / 40.0f);
+    return voltage;
+}
 
 void OSSM::setEncoderPercentage(float percentage)
 {
