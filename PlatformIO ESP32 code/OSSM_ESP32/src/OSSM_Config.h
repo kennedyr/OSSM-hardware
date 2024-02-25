@@ -11,7 +11,7 @@
 #define LogDebugFormatted(...) ((void)0)
 #endif
 
-#define SW_VERSION "0.23"
+#define SW_VERSION "0.25"
 #define HW_VERSION 22 // divide by 10 for real hw version
 #define EEPROM_SIZE 200
 

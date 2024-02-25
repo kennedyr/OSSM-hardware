@@ -605,6 +605,7 @@ float OSSM::sensorlessHoming()
     // find retracted position, mark as zero, find extended position, calc total length, subtract 2x offsets and
     // record length.
     //  move to offset and call it zero. homing complete.
+    // We now check the limit switch while doing this - so no need for seperate routine.
 
     pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
 
