@@ -807,7 +807,7 @@ void OSSM::startLeds()
 
 void OSSM::updateAnalogInputs()
 {
-    speedPercentage = getAnalogAveragePercent(SPEED_POT_PIN, 50);
+    speedPercentage = 0.3 * getAnalogAveragePercent(SPEED_POT_PIN, 50) + 0.7 * speedPercentage;
 
     if (modeChanged)
     {
@@ -860,9 +860,17 @@ void OSSM::updateAnalogInputs()
                 break;
         }
     }
+}
 
-    immediateCurrent = getCurrentReadingAmps(20);
-    averageCurrent = immediateCurrent * 0.02 + averageCurrent * 0.98;
+float OSSM::printSensorReadings()
+{
+    immediateCurrent = getCurrentReadingAmps(30);
+    averageCurrent = immediateCurrent * 0.7 + averageCurrent * 0.3;
+    immediateVoltage = getVoltageReading(30);
+    averageVoltage = immediateVoltage * 0.7 + averageVoltage * 0.3;
+    // LogDebugFormatted("Current: %.2fA, Voltage: %.2fV\n", immediateCurrent, immediateVoltage);
+    LogDebugFormatted("%.2f,%.2f,%.2f,%.2f,\n", stepper.getCurrentPositionInMillimeters(),
+                      stepper.getCurrentVelocityInMillimetersPerSecond(), averageCurrent, averageVoltage);
 }
 
 float OSSM::getCurrentReadingAmps(int samples)

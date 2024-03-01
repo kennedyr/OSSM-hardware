@@ -60,6 +60,8 @@ class OSSM
     float currentSensorOffset = 0;
     float immediateCurrent = 0;
     float averageCurrent = 0;
+    float immediateVoltage = 0;
+    float averageVoltage = 0;
     float numberStrokes = 0;
     float travelledDistanceMeters = 0;
     float lifeSecondsPowered = 0;
@@ -119,6 +121,7 @@ class OSSM
     void startLeds();
 
     // inputs
+    float printSensorReadings();
     void updateAnalogInputs();
     float getCurrentReadingAmps(int samples);
     float getVoltageReading(int samples);
