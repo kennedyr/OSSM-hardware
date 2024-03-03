@@ -15,7 +15,8 @@
 #define MOTOR_DIRECTION_PIN 27
 // Pin for motor enable - likely labelled ENA on drivers.
 #define MOTOR_ENABLE_PIN 26
-
+#define VOLTAGE_SENSE_PIN 39
+#define CURRENT_SENSE_PIN 36
 /*
     Homing and safety pins
 */

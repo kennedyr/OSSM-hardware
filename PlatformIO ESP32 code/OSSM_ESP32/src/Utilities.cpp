@@ -774,12 +774,12 @@ void OSSM::updateLifeStats()
     days = hours / 24;
     if ((millis() - lastLifeUpdateMillis) > 5000)
     {
-        Serial.printf("\n%dd %dh %dm %ds \n", ((int(days))), (int(hours) % 24), (int(minutes) % 60),
-                      (int(lifeSecondsPowered) % 60));
-        Serial.printf("%.0f strokes \n", numberStrokes);
-        Serial.printf("%.2f kilometers \n", travelledDistanceKilometers);
-        Serial.printf("%.2fA avg current \n", averageCurrent);
-        lastLifeUpdateMillis = millis();
+        // Serial.printf("\n%dd %dh %dm %ds \n", ((int(days))), (int(hours) % 24), (int(minutes) % 60),
+        //               (int(lifeSecondsPowered) % 60));
+        // Serial.printf("%.0f strokes \n", numberStrokes);
+        // Serial.printf("%.2f kilometers \n", travelledDistanceKilometers);
+        // Serial.printf("%.2fA avg current \n", averageCurrent);
+        // lastLifeUpdateMillis = millis();
     }
     if ((millis() - lastLifeWriteMillis) > 180000)
     {
@@ -869,18 +869,24 @@ float OSSM::printSensorReadings()
     immediateVoltage = getVoltageReading(30);
     averageVoltage = immediateVoltage * 0.7 + averageVoltage * 0.3;
     // LogDebugFormatted("Current: %.2fA, Voltage: %.2fV\n", immediateCurrent, immediateVoltage);
-    LogDebugFormatted("%.2f,%.2f,%.2f,%.2f,\n", stepper.getCurrentPositionInMillimeters(),
-                      stepper.getCurrentVelocityInMillimetersPerSecond(), averageCurrent, averageVoltage);
+    LogDebugFormatted("%.2f,%.2f,%.2f,%.2f\n", stepper.getCurrentPositionInMillimeters(),
+                      stepper.getCurrentVelocityInMillimetersPerSecond(), averageCurrent*20.0, averageVoltage);
 }
 
 float OSSM::getCurrentReadingAmps(int samples)
 {
-    float currentAnalogPercent = getAnalogAveragePercent(36, samples) - currentSensorOffset;
+   float currentAnalogPercent = getAnalogAveragePercent(CURRENT_SENSE_PIN, samples) - currentSensorOffset;
     float current = currentAnalogPercent * 0.13886;
     // 0.13886 is a scaling factor determined by real life testing. Convert percent full scale to amps.
+    // 15lbf on gold motor gives 0.7 - 0.75A at low speed. Let's 1A = 20 lbf approximately
     return current;
 }
-float OSSM::getVoltageReading(int samples) {}
+float OSSM::getVoltageReading(int samples) {
+     float voltageAnalogPercent = getAnalogAveragePercent(VOLTAGE_SENSE_PIN, samples);
+    float voltage = (voltageAnalogPercent * 2.6f * 40.0f) / 100.0f;
+    return voltage;
+}
+
 
 void OSSM::setEncoderPercentage(float percentage)
 {

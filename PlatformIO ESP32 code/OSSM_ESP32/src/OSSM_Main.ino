@@ -187,7 +187,7 @@ void getUserInputTask(void *pvParameters)
         //          "\% Distance to target: " + String(ossm.stepper.getDistanceToTargetSigned()) + " steps?");
 
         ossm.updateAnalogInputs();
-        //ossm.printSensorReadings();
+        ossm.printSensorReadings();
         ossm.handleStopCondition();
 
         if (digitalRead(WIFI_CONTROL_TOGGLE_PIN) == HIGH) // TODO: check if wifi available and handle gracefully
@@ -229,7 +229,17 @@ void getUserInputTask(void *pvParameters)
             // high to low speed causes the motor to travel a long distance before slowing.
         }
         previousSpeedPercentage = ossm.speedPercentage;
-        vTaskDelay(80); // let other code run!
+
+        float waitStartTime = millis();
+        while(millis() - waitStartTime < 80) // let other code run!
+        {
+            ossm.printSensorReadings();
+            vTaskDelay(10); // let other code run!
+        }
+
+
+
+
     }
 }
 
