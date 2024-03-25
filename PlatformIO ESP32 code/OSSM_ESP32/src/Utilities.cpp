@@ -868,9 +868,10 @@ float OSSM::printSensorReadings()
     averageCurrent = immediateCurrent * 0.7 + averageCurrent * 0.3;
     immediateVoltage = getVoltageReading(30);
     averageVoltage = immediateVoltage * 0.7 + averageVoltage * 0.3;
+    float time = millis();
     // LogDebugFormatted("Current: %.2fA, Voltage: %.2fV\n", immediateCurrent, immediateVoltage);
-    LogDebugFormatted("%.2f,%.2f,%.2f,%.2f\n", stepper.getCurrentPositionInMillimeters(),
-                      stepper.getCurrentVelocityInMillimetersPerSecond(), averageCurrent*20.0, averageVoltage);
+    LogDebugFormatted("%.2f,%.2f,%.2f,%.2f,%10.3f\n", stepper.getCurrentPositionInMillimeters(),
+                      stepper.getCurrentVelocityInMillimetersPerSecond(), averageCurrent*20.0, averageVoltage,time);
 }
 
 float OSSM::getCurrentReadingAmps(int samples)
