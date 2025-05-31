@@ -246,7 +246,7 @@ class TeasingPounding : public Pattern {
         // calculate the time it takes to complete the faster stroke
         // Division by 2 because reference is a half stroke
         _timeOfFastStroke = (0.5 * _timeOfStroke) /
-                            fscale(0.0, 100.0, 1.0, 5.0, abs(_sensation), 0.0);
+                            fscale(0.0, 100.0, 1.0, 5.0, abs(_sensation), -1.5);
         // positive sensation, in is faster
         if (_sensation > 0.0) {
             _timeOfInStroke = _timeOfFastStroke;
@@ -389,7 +389,7 @@ class HalfnHalf : public Pattern {
         // calculate the time it takes to complete the faster stroke
         // Division by 2 because reference is a half stroke
         _timeOfFastStroke = (0.5 * _timeOfStroke) /
-                            fscale(0.0, 100.0, 1.0, 5.0, abs(_sensation), 0.0);
+                            fscale(0.0, 100.0, 1.0, 5.0, abs(_sensation), -1.5);
         // positive sensation, in is faster
         if (_sensation > 0.0) {
             _timeOfInStroke = _timeOfFastStroke;
@@ -497,8 +497,8 @@ class StopNGo : public Pattern {
     void setSensation(float sensation) {
         _sensation = sensation;
 
-        // maps sensation to a delay from 100ms to 10 sec
-        _updateDelay(map(sensation, -100, 100, 100, 10000));
+        // maps sensation to a delay from 100ms to 1 sec
+        _updateDelay(map(sensation, -100, 100, 100, 1000));
     }
 
     motionParameter nextTarget(unsigned int index) {
@@ -727,7 +727,7 @@ class JackHammer : public Pattern {
         // Scale vibration amplitude from 1mm to 15mm with sensation
         _inVibrationDistance =
             (int)fscale(-100.0, 100.0, (float)(3.0 * _stepsPerMM),
-                        (float)(25.0 * _stepsPerMM), _sensation, 0.0);
+                        (float)(25.0 * _stepsPerMM), _sensation, -1.5);
 
         /* Calculate _outVibrationDistance to match with stroking speed
            d_out = d_in * (v_vib - v_stroke) / (v_vib + v_stroke)
@@ -852,7 +852,7 @@ class StrokeNibbler : public Pattern {
         // Scale vibration amplitude from 3mm to 25mm with sensation
         _inVibrationDistance =
             (int)fscale(-100.0, 100.0, (float)(3.0 * _stepsPerMM),
-                        (float)(25.0 * _stepsPerMM), _sensation, 0.0);
+                        (float)(25.0 * _stepsPerMM), _sensation, -1.5);
 
         /* Calculate _outVibrationDistance to match with stroking speed
            d_out = d_in * (v_vib - v_stroke) / (v_vib + v_stroke)
