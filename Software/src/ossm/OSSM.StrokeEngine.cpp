@@ -93,6 +93,12 @@ void OSSM::startStrokeEngineTask(void *pvParameters) {
                 case StrokePatterns::Insist:
                     Stroker.setPattern(new Insist("Insist"), false);
                     break;
+                case StrokePatterns::JackHammer:
+                    Stroker.setPattern(new JackHammer("Jack Hammer"), false);
+                    break;
+                case StrokePatterns::StrokeNibbler:
+                    Stroker.setPattern(new StrokeNibbler("Stroke Nibbler"), false);
+                    break;
                 default:
                     break;
             }
