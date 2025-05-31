@@ -418,7 +418,7 @@ class StrokeEngine {
     Pattern *pattern = new SimpleStroke("Simple Stroke");
     bool _isHomed = false;
     int _index = 0;
-    int _distance = 0;
+    double _distance = 0;
     int _depth;
     int _previousDepth;
     int _stroke;

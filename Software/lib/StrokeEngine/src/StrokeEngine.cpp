@@ -734,10 +734,7 @@ void StrokeEngine::_stroking() {
 #ifdef DEBUG_STROKE
                     Serial.println("Stroking Index: " + String(_index));
 #endif
-                    int delta = _depth - _stroke;
-                    // we want to find the absolute value of delta
-                    int const mask = delta >> sizeof(int) * CHAR_BIT - 1;
-                    unsigned int steps = (delta + mask) ^ mask;
+                    int steps = abs(_depth - _stroke);
                     _distance += ((float)steps / _motor->stepsPerMillimeter) / 1000.0;
 
                     // Apply new trapezoidal motion profile to _servo
