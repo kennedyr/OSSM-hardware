@@ -153,6 +153,9 @@ void OSSM::drawPlayControlsTask(void *pvParameters) {
          * These controls are associated with stroke and distance
          */
         ossm->display.setFont(Config::Font::small);
+        strokeString = String(ossm->strokesPerMin) + "s/m ";
+        ossm->display.drawUTF8(14, lh3, strokeString.c_str());
+
         strokeString = "# " + String(ossm->sessionStrokeCount);
         ossm->display.drawUTF8(14, lh4, strokeString.c_str());
 
@@ -164,13 +167,10 @@ void OSSM::drawPlayControlsTask(void *pvParameters) {
          * These controls are associated with stroke and distance
          */
 
-        // TODO Display Strokes/Min
-        // if (!isStrokeEngine) {
-            strokeString = formatDistance(ossm->sessionDistanceMeters);
-            stringWidth = ossm->display.getUTF8Width(strokeString.c_str());
-            ossm->display.drawUTF8(104 - stringWidth, lh3,
-                                   strokeString.c_str());
-        // }
+        strokeString = formatDistance(ossm->sessionDistanceMeters);
+        stringWidth = ossm->display.getUTF8Width(strokeString.c_str());
+        ossm->display.drawUTF8(104 - stringWidth, lh3,
+                                strokeString.c_str());
 
         strokeString =
             formatTime(displayLastUpdated - ossm->sessionStartTime).c_str();
