@@ -99,6 +99,9 @@ void OSSM::startStrokeEngineTask(void *pvParameters) {
 
             lastSetting.pattern = ossm->setting.pattern;
         }
+        ossm->sessionStrokeCount = floor(Stroker.getIndex() / 2);
+        ossm->strokesPerMin = Stroker.getSpeed();
+        ossm->sessionDistanceMeters = Stroker.getDistance();
 
         vTaskDelay(400);
     }

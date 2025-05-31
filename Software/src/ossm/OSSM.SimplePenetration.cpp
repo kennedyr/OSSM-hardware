@@ -83,10 +83,12 @@ void OSSM::startSimplePenetrationTask(void *pvParameters) {
 
             // This calculation assumes that at the end of every stroke you have
             // a whole positive distance, equal to maximum target position.
-            ossm->sessionDistanceMeters +=
-                (((float)ossm->setting.stroke / 100.0) *
-                 ossm->measuredStrokeSteps / (1_mm)) /
-                1000.0;
+            auto strokeMm = (((float)ossm->setting.stroke / 100.0) *
+                 ossm->measuredStrokeSteps / (1_mm));
+            ossm->sessionDistanceMeters += strokeMm / 1000.0;
+
+            auto speedMmPerSecond = Config::Driver::maxSpeedMmPerSecond * ossm->setting.speed / 100.0;
+            ossm->strokesPerMin = strokeMm * (speedMmPerSecond / 60);
         }
 
         vTaskDelay(1);

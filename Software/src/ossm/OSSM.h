@@ -264,6 +264,7 @@ class OSSM {
                                .pattern = StrokePatterns::SimpleStroke};
 
     unsigned long sessionStartTime = 0;
+    int strokesPerMin = 0;
     int sessionStrokeCount = 0;
     double sessionDistanceMeters = 0;
 
