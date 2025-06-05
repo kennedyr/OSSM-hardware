@@ -30,8 +30,8 @@ struct LanguageStruct {
     String WiFiSetupLine1;
     String WiFiSetupLine2;
     String YouShouldNotBeHere;
-    String StrokeEngineDescriptions[7];
-    String StrokeEngineNames[7];
+    String StrokeEngineDescriptions[9];
+    String StrokeEngineNames[9];
 };
 
 #endif  // OSSM_SOFTWARE_LANGUAGESTRUCT_H
