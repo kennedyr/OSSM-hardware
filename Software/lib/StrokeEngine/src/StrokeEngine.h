@@ -138,6 +138,22 @@ class StrokeEngine {
 
     /**************************************************************************/
     /*!
+      @brief  Get the stroke count.
+      @return Strokes.
+    */
+    /**************************************************************************/
+    int getIndex();
+
+    /**************************************************************************/
+    /*!
+      @brief  Get distance traveled.
+      @return Distance in Meters.
+    */
+    /**************************************************************************/
+    int getDistance();
+
+    /**************************************************************************/
+    /*!
       @brief  Set the depth of a stroke. Settings tale effect with next stroke,
       or after calling applyNewSettingsNow().
       @param depth Depth in [mm]. Is constrained from 0 to TRAVEL
@@ -402,6 +418,7 @@ class StrokeEngine {
     Pattern *pattern = new SimpleStroke("Simple Stroke");
     bool _isHomed = false;
     int _index = 0;
+    double _distance = 0;
     int _depth;
     int _previousDepth;
     int _stroke;

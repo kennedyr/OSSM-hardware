@@ -25,6 +25,7 @@ void StrokeEngine::begin(machineGeometry *physics, motorProperties *motor,
     _state = UNDEFINED;
     _isHomed = false;
     _index = 0;
+    _distance = 0;
     _depth = _maxStep;
     _previousDepth = _maxStep;
     _stroke = _maxStep / 3;
@@ -77,6 +78,14 @@ void StrokeEngine::setSpeed(float speed, bool applyNow = false) {
 float StrokeEngine::getSpeed() {
     // Convert speed into FPMs
     return 60.0 / _timeOfStroke;
+}
+
+int StrokeEngine::getIndex() {
+    return _index;
+}
+
+int StrokeEngine::getDistance() {
+    return _distance;
 }
 
 void StrokeEngine::setDepth(float depth, bool applyNow = false) {
@@ -725,6 +734,9 @@ void StrokeEngine::_stroking() {
 #ifdef DEBUG_STROKE
                     Serial.println("Stroking Index: " + String(_index));
 #endif
+                    int steps = abs(_depth - _stroke);
+                    _distance += ((float)steps / _motor->stepsPerMillimeter) / 1000.0;
+
                     // Apply new trapezoidal motion profile to _servo
                     _applyMotionProfile(&currentMotion);
 
