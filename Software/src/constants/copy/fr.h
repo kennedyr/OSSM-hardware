@@ -45,9 +45,7 @@ static const LanguageStruct fr = {
         "Alternance de coups pleins et à demi-profondeur ; la sensation affecte la vitesse.",
         "La profondeur des coups augmente à chaque cycle ; la sensation définit le nombre.",
         "Pauses entre les coups ; la sensation ajuste la longueur.",
-        "Modifie la longueur, maintient la vitesse ; la sensation influe sur la direction.",
-        "Vibration like a jack hammer. Sensation sets the vibration.",
-        "Vibrates on the way in and out. Sensation sets the vibration.",
+        "Modifie la longueur, maintient la vitesse ; la sensation influe sur la direction."
     },
     .StrokeEngineNames = {
         "Simple Stroke",
@@ -58,7 +56,7 @@ static const LanguageStruct fr = {
         "Stop'n'Go",
         "Insist",
         "Jack Hammer",
-        "Stroke Nibbler",
+        "Stroke Nibbler"
     }
 };
 

@@ -41,9 +41,7 @@ static const LanguageStruct enUs = {
         "Full and half depth strokes alternate; sensation affects speed.",
         "Stroke depth increases per cycle; sensation sets count.",
         "Pauses between strokes; sensation adjusts length.",
-        "Modifies length, maintains speed; sensation influences direction.",
-        "Vibration like a jack hammer. Sensation sets the vibration.",
-        "Vibrates on the way in and out. Sensation sets the vibration.",
+        "Modifies length, maintains speed; sensation influences direction."
     },
     .StrokeEngineNames = {
         "Simple Stroke",
@@ -54,7 +52,7 @@ static const LanguageStruct enUs = {
         "Stop'n'Go",
         "Insist",
         "Jack Hammer",
-        "Stroke Nibbler",
+        "Stroke Nibbler"
     },
 };
 
