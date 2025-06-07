@@ -88,7 +88,8 @@ void OSSM::startSimplePenetrationTask(void *pvParameters) {
             ossm->sessionDistanceMeters += strokeMm / 1000.0;
 
             auto speedMmPerSecond = Config::Driver::maxSpeedMmPerSecond * ossm->setting.speed / 100.0;
-            ossm->strokesPerMin = strokeMm * (speedMmPerSecond / 60);
+            auto fullStrokeMM = strokeMm * 2;
+            ossm->strokesPerMin = (speedMmPerSecond / fullStrokeMM) * 60;
         }
 
         vTaskDelay(1);

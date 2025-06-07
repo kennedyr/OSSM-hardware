@@ -77,14 +77,14 @@ void StrokeEngine::setSpeed(float speed, bool applyNow = false) {
 
 float StrokeEngine::getSpeed() {
     // Convert speed into FPMs
-    return 60.0 / _timeOfStroke;
+    return _timeOfStroke * 60;
 }
 
 int StrokeEngine::getIndex() {
     return _index;
 }
 
-int StrokeEngine::getDistance() {
+double StrokeEngine::getDistance() {
     return _distance;
 }
 
@@ -735,7 +735,7 @@ void StrokeEngine::_stroking() {
                     Serial.println("Stroking Index: " + String(_index));
 #endif
                     int steps = abs(_depth - _stroke);
-                    _distance += ((float)steps / _motor->stepsPerMillimeter) / 1000.0;
+                    _distance += ((double)steps / _motor->stepsPerMillimeter) / 1000.0;
 
                     // Apply new trapezoidal motion profile to _servo
                     _applyMotionProfile(&currentMotion);
