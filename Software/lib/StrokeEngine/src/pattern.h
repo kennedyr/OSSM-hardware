@@ -409,7 +409,7 @@ class HalfnHalf : public Pattern {
 /**************************************************************************/
 /*!
   @brief  The insertion depth ramps up gradually with each stroke until it
-  reaches its maximum. It then resets and restars. Sensations controls how
+  reaches its maximum. It then resets and restarts. Sensations controls how
   many strokes there are in a ramp.
 */
 /**************************************************************************/
@@ -425,12 +425,8 @@ class Deeper : public Pattern {
     void setSensation(float sensation) {
         _sensation = sensation;
 
-        // maps sensation to useful values [2,22] with 12 beeing neutral
-        if (sensation < 0) {
-            _countStrokesForRamp = map(sensation, -100, 0, 2, 11);
-        } else {
-            _countStrokesForRamp = map(sensation, 0, 100, 11, 32);
-        }
+        // maps sensation to useful values [2,12]
+        _countStrokesForRamp = map(sensation, -100, 100, 2, 12);
 #ifdef DEBUG_PATTERN
         Serial.println("_countStrokesForRamp: " + String(_countStrokesForRamp));
 #endif
