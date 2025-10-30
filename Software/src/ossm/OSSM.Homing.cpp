@@ -3,6 +3,7 @@
 #include "Events.h"
 #include "constants/UserConfig.h"
 #include "utils/analog.h"
+#include "services/led.h"
 
 namespace sml = boost::sml;
 using namespace sml;
@@ -15,6 +16,10 @@ using namespace sml;
  */
 void OSSM::clearHoming() {
     ESP_LOGD("Homing", "Homing started");
+    
+    // Set homing active flag for LED indication
+    setHomingActive(true);
+    
     isForward = true;
 
     // Set acceleration and deceleration in steps/s^2
@@ -35,6 +40,14 @@ void OSSM::startHomingTask(void *pvParameters) {
 
     // parse parameters to get OSSM reference
     OSSM *ossm = (OSSM *)pvParameters;
+
+#ifdef AJ_DEVELOPMENT_HARDWARE
+    ossm->stepper->setCurrentPosition(0);
+    ossm->stepper->forceStopAndNewPosition(0);
+    ossm->sm->process_event(Done{});
+    vTaskDelete(nullptr);
+    return;
+#endif
 
     // Stroke Engine and Simple Penetration treat this differently.
     ossm->stepper->enableOutputs();
@@ -66,6 +79,10 @@ void OSSM::startHomingTask(void *pvParameters) {
         if (msPassed > 40000) {
             ESP_LOGE("Homing", "Homing took too long. Check power and restart");
             ossm->errorMessage = UserConfig::language.HomingTookTooLong;
+            
+            // Clear homing active flag for LED indication
+            setHomingActive(false);
+            
             ossm->sm->process_event(Error{});
             break;
         }
@@ -80,7 +97,7 @@ void OSSM::startHomingTask(void *pvParameters) {
             current > Config::Driver::sensorlessCurrentLimit;
 
         if (!isCurrentOverLimit) {
-            vTaskDelay(1);
+            vTaskDelay(10); // Increased from 1ms to 10ms to reduce CPU load
             continue;
         }
 
@@ -99,6 +116,9 @@ void OSSM::startHomingTask(void *pvParameters) {
         ossm->stepper->setCurrentPosition(0);
         ossm->stepper->forceStopAndNewPosition(0);
 
+        // Clear homing active flag for LED indication
+        setHomingActive(false);
+
         ossm->sm->process_event(Done{});
         break;
     };
@@ -109,8 +129,8 @@ void OSSM::startHomingTask(void *pvParameters) {
 void OSSM::startHoming() {
     int stackSize = 10 * configMINIMAL_STACK_SIZE;
     xTaskCreatePinnedToCore(startHomingTask, "startHomingTask", stackSize, this,
-                            configMAX_PRIORITIES - 1, &runHomingTaskH,
-                            operationTaskCore);
+                            configMAX_PRIORITIES - 1, &Tasks::runHomingTaskH,
+                            Tasks::operationTaskCore);
 }
 
 auto OSSM::isStrokeTooShort() -> bool {
